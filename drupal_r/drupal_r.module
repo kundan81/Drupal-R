@@ -1,11 +1,11 @@
 <?php
 
-  function myr_menu() {
+  function drupal_r_menu() {
     $items = array();
-    $items['myr/form'] = array(
+    $items['drupal_r/form'] = array(
       'title' => t('My Form'),
       'page callback' => 'drupal_get_form',
-      'page arguments' => array('myr_form'),
+      'page arguments' => array('drupal_r_form'),
       'access arguments' => array('access content'),
       'description' => t('This form calculate sum of two numbers'),
       'type' => MENU_CALLBACK,
@@ -16,7 +16,7 @@
   /**
    * Returns the render array for the form.
    */
-  function myr_form($form, &$form_state) {
+  function drupal_r_form($form, &$form_state) {
     $form['calculate'] = array(
       '#type' => 'fieldset',
       '#title' => t('Some Calculations Based On Numbers'),
@@ -93,7 +93,7 @@
   /**
    * Validates the form.
    */
-  function myr_form_validate($form, &$form_state) {
+  function drupal_r_form_validate($form, &$form_state) {
     if (empty($form_state['values']['first']) && empty($form_state['values']['second'])) {
       form_set_error('error', t('Enter Value First.'));
     }
@@ -104,7 +104,7 @@
    *
    * This will rebuild this form after successfull submission of form.
    */
-  function myr_form_submit($form, &$form_state) {
+  function drupal_r_form_submit($form, &$form_state) {
     $form_state['rebuild'] = TRUE;
   }
 
