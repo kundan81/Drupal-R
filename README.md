@@ -14,14 +14,21 @@ In this project,we are writing statistical computing code in R programing & use 
 Install Drupal 7 & R.
 
 1.  Steps to install Drupal 7
+
       1.1 Visit drupal.org & download drupal 7
+
       1.2 Follow instruction written in README.txt file.
 
 2.  Steps to install R.
+
     2.1 Open terminal or console.
+
     2.2 Put R[capital letter] and hit enter.
+
     2.3 if R already install on local machine then > will be shown on your terminal.
-    2.4 if not install this will shown on your terminal. 
+
+    2.4 if not install this will shown on your terminal.
+    
       The program 'R' is currently not installed. You can install it by typing:
       sudo apt-get install r-base-core
       use "sudo apt-get install r-base-core" command to install R.
