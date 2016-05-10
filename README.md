@@ -1,5 +1,5 @@
 # Drupal-R
-R Code used in drupal using apache
+R Code used in drupal REST API.
 
 ## Synopsis
 
@@ -8,14 +8,6 @@ Drupal is content management software.
 
 In this project,we are writing statistical computing code in R programing & use in drupal.
 
-
-## Code Example
-
-Show what the library does as concisely as possible, developers should be able to figure out **how** your project solves their problem by looking at the code example. Make sure the API you are showing off is obvious, and that your code is short and concise.
-
-## Motivation
-
-A short description of the motivation behind the creation and maintenance of the project. This should explain **why** the project exists.
 
 ## Installation
 
@@ -50,13 +42,13 @@ Install Drupal 7 & R.
 
     R script folder that contain a file named as myfile.R. you can place this folder any where you want to your local system.
       
-5.  Run your r script file on apache server with port number 8787[you can change this port number].
+5.  Run your r script file with port number 8787[you can change this port number].
     5.1 open terminal/console and go to R script directory.
     5.2 R[capital] press ENTER
     5.3 library(plumber)
     5.4 r <- plumb("myfile.R")
     5.5 r$run(port=8787)
-      5.5.1 after this if every thing goes right this will running on apache server of port number 8787.
+      5.5.1 after this if every thing goes right this will running on port number 8787.
       5.5.2 stop running server press Ctrl+c
       5.5.3 exit form R console write q() & press enter this will show three option [y/n/c] if you
       press y what you have done will be save in R console next time you can use it. if press n 
