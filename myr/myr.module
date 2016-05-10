@@ -1,0 +1,170 @@
+<?php
+
+  function myr_menu() {
+    $items = array();
+    $items['myr/form'] = array(
+      'title' => t('My Form'),
+      'page callback' => 'drupal_get_form',
+      'page arguments' => array('myr_form'),
+      'access arguments' => array('access content'),
+      'description' => t('This form calculate sum of two numbers'),
+      'type' => MENU_CALLBACK,
+    );
+    return $items;
+  }
+
+  /**
+   * Returns the render array for the form.
+   */
+  function myr_form($form, &$form_state) {
+    $form['calculate'] = array(
+      '#type' => 'fieldset',
+      '#title' => t('Some Calculations Based On Numbers'),
+      '#collapsible' => TRUE,
+      '#collapsed' => FALSE,
+    );
+    $form['calculate']['first'] = array(
+      '#type' => 'textfield',
+      '#title' => t('First Number'),
+      '#description' => "Please Enter Your First Number.",
+      '#size' => 20,
+      '#maxlength' => 20,
+    );
+    $form['calculate']['second'] = array(
+      '#type' => 'textfield',
+      '#title' => t('Second Number'),
+      '#default_value' => 0,
+      '#description' => "For Calculating Factorial Put 0 HERE.",
+      '#size' => 20,
+      '#maxlength' => 20,
+    );
+    if(!empty($form_state['values']['first']) && ($form_state['values']['second'] != 0)) {
+      $time_start1 = (float) array_sum(explode(' ',microtime()));
+      $r_sum = calculate_sum_using_r($form_state['values']['first'], $form_state['values']['second']);
+      $time_end1 = (float) array_sum(explode(' ',microtime()));      
+      echo "Processing time: ". sprintf("%.4f", ($time_end1-$time_start1))." seconds";
+
+      $time_start2 = (float) array_sum(explode(' ',microtime()));
+      $p_sum = $form_state['values']['first'] + $form_state['values']['second'];
+      $time_end2 = (float) array_sum(explode(' ',microtime()));
+      echo "Processing time: ". sprintf("%.4f", ($time_end2-$time_start2))." seconds";
+
+      $form['calculate']['r_sum'] = array(
+        '#prefix' => '<div class = "time-zone-right">',
+        '#markup' => '<h1>' . t('Sum Using R: ') . $r_sum . '</h1>',
+        '#suffix' => '</div>'
+      );
+      $form['calculate']['p_sum'] = array(
+        '#prefix' => '<div class = "time-zone-right">',
+        '#markup' => '<h1>' . t('Sum Using PHP: ') . $p_sum . '</h1>',
+        '#suffix' => '</div>'
+      );
+    }
+
+    if(!empty($form_state['values']['first']) && ($form_state['values']['second'] == 0)) {
+      $time_start1 = (float) array_sum(explode(' ',microtime()));
+      $r_facto = calculate_factorial_using_r($form_state['values']['first']);
+      $time_end1 = (float) array_sum(explode(' ',microtime()));
+      echo "Processing time: ". sprintf("%.4f", ($time_end1-$time_start1))." seconds";
+      $time_start2 = (float) array_sum(explode(' ',microtime()));
+      $p_facto = fact($form_state['values']['first']);
+      $time_end2 = (float) array_sum(explode(' ',microtime()));
+      echo "Processing time: ". sprintf("%.4f", ($time_end2-$time_start2))." seconds";
+
+      $form['calculate']['r_facto'] = array(
+        '#prefix' => '<div class = "time-zone-right">',
+        '#markup' => '<h1>' . t('Factorial Using R: ') . $r_facto . '</h1>',
+        '#suffix' => '</div>'
+      );
+      $form['calculate']['p_facto'] = array(
+        '#prefix' => '<div class = "time-zone-right9">',
+        '#markup' => '<h1>' . t('Factorial Using PHP: ') . $p_facto .'</h1>',
+        '#suffix' => '</div>'
+      );
+    }
+
+    $form['submit'] = array(
+      '#type' => 'submit',
+      '#value' => 'Submit',
+    );
+    return $form;    
+  }
+
+  /**
+   * Validates the form.
+   */
+  function myr_form_validate($form, &$form_state) {
+    if (empty($form_state['values']['first']) && empty($form_state['values']['second'])) {
+      form_set_error('error', t('Enter Value First.'));
+    }
+  }
+
+  /**
+   * Add a submit handler/function to the form.
+   *
+   * This will rebuild this form after successfull submission of form.
+   */
+  function myr_form_submit($form, &$form_state) {
+    $form_state['rebuild'] = TRUE;
+  }
+
+  /**
+   * Finding Sum Using API.
+   */
+  function calculate_sum_using_r($first_value = '', $second_value = '') {
+    $url = 'http://127.0.1.2:8787/sum';
+    $data = array(
+      'a' => $first_value,
+      'b' => $second_value,
+    );
+    $full_url = url($url, array('query' => $data));
+    $ch = curl_init();
+    curl_setopt($ch, CURLOPT_RETURNTRANSFER,1);
+    curl_setopt($ch, CURLOPT_AUTOREFERER, TRUE);
+    curl_setopt($ch, CURLOPT_HEADER, 0);
+    curl_setopt($ch, CURLOPT_NOBODY, 0);
+    curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
+    curl_setopt($ch, CURLOPT_URL, $full_url);
+    $val = curl_exec($ch);
+    if($val === false) 
+      echo 'Curl error: ' . curl_error($ch);
+    curl_close($ch);
+    return $val;
+  }
+
+  /**
+   * Finding Factorial Using API.
+   */
+  function calculate_factorial_using_r($first_value = '') {
+    $url = 'http://127.0.1.2:8787/facto';
+    $data = array(
+      'x' => $first_value,
+    );
+    $full_url = url($url, array('query' => $data));
+    $ch = curl_init();
+    curl_setopt($ch, CURLOPT_RETURNTRANSFER,1);
+    curl_setopt($ch, CURLOPT_AUTOREFERER, TRUE);
+    curl_setopt($ch, CURLOPT_HEADER, 0);
+    curl_setopt($ch, CURLOPT_NOBODY, 0);
+    curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
+    curl_setopt($ch, CURLOPT_URL, $full_url);
+    $val = curl_exec($ch);
+    if($val === false) 
+      echo 'Curl error: ' . curl_error($ch);
+    curl_close($ch);
+    return $val;
+  }
+
+  /**
+   * Implements Factorial in PHP.
+   */
+  function fact($n) {
+    if ($n == 0)
+    {
+      return 1;
+    }
+    else
+    {
+      return $n * fact($n - 1);
+    }
+  }

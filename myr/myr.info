@@ -1,0 +1,4 @@
+name = R Calculation
+description = Calculation using R Programing.
+core = 7.x
+package = CALCULATION R.
