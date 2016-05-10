@@ -1,5 +1,5 @@
-# Drupal-R
-R Code used in drupal REST API.
+## Drupal-R
+R[REST API] Code used in drupal.
 
 ## Synopsis
 
