@@ -87,6 +87,16 @@
       '#type' => 'submit',
       '#value' => 'Submit',
     );
+    $form['simple_line_chart'] = array(
+      '#markup' => '<h1><a href="http://127.0.1.2:8787/line_chart">Simple Line Chart</a></h1>',
+    );
+    $form['pie_chart'] = array(
+      '#markup' => '<h1><a href="http://127.0.1.2:8787/pie_chart">Pie Chart</a></h1>',
+    );
+    $form['histo_gram'] = array(
+      '#markup' => '<h1><a href="http://127.0.1.2:8787/histo_gram">Histogram</a></h1>',
+    );
+
     return $form;    
   }
 
@@ -97,6 +107,37 @@
     if (empty($form_state['values']['first']) && empty($form_state['values']['second'])) {
       form_set_error('error', t('Enter Value First.'));
     }
+  }
+
+  /**
+   * Implements Factorial in PHP.
+   */
+  function fact($n) {
+    if ($n == 0) {
+      return 1;
+    }
+    else {
+      return $n * fact($n - 1);
+    }
+  }
+
+  /**
+   * Creating Full URl & Extracting Value Using Curl .
+   */
+  function geting_data_using_curl($url, $data){
+    $full_url = url($url, array('query' => $data));
+    $ch = curl_init();
+    curl_setopt($ch, CURLOPT_RETURNTRANSFER,1);
+    curl_setopt($ch, CURLOPT_AUTOREFERER, TRUE);
+    curl_setopt($ch, CURLOPT_HEADER, 0);
+    curl_setopt($ch, CURLOPT_NOBODY, 0);
+    curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
+    curl_setopt($ch, CURLOPT_URL, $full_url);
+    $val = curl_exec($ch);
+    if($val === false) 
+      echo 'Curl error: ' . curl_error($ch);
+    curl_close($ch);
+    return $val;
   }
 
   /**
@@ -117,19 +158,7 @@
       'a' => $first_value,
       'b' => $second_value,
     );
-    $full_url = url($url, array('query' => $data));
-    $ch = curl_init();
-    curl_setopt($ch, CURLOPT_RETURNTRANSFER,1);
-    curl_setopt($ch, CURLOPT_AUTOREFERER, TRUE);
-    curl_setopt($ch, CURLOPT_HEADER, 0);
-    curl_setopt($ch, CURLOPT_NOBODY, 0);
-    curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
-    curl_setopt($ch, CURLOPT_URL, $full_url);
-    $val = curl_exec($ch);
-    if($val === false) 
-      echo 'Curl error: ' . curl_error($ch);
-    curl_close($ch);
-    return $val;
+    return geting_data_using_curl($url, $data);
   }
 
   /**
@@ -140,31 +169,5 @@
     $data = array(
       'x' => $first_value,
     );
-    $full_url = url($url, array('query' => $data));
-    $ch = curl_init();
-    curl_setopt($ch, CURLOPT_RETURNTRANSFER,1);
-    curl_setopt($ch, CURLOPT_AUTOREFERER, TRUE);
-    curl_setopt($ch, CURLOPT_HEADER, 0);
-    curl_setopt($ch, CURLOPT_NOBODY, 0);
-    curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
-    curl_setopt($ch, CURLOPT_URL, $full_url);
-    $val = curl_exec($ch);
-    if($val === false) 
-      echo 'Curl error: ' . curl_error($ch);
-    curl_close($ch);
-    return $val;
-  }
-
-  /**
-   * Implements Factorial in PHP.
-   */
-  function fact($n) {
-    if ($n == 0)
-    {
-      return 1;
-    }
-    else
-    {
-      return $n * fact($n - 1);
-    }
+    return geting_data_using_curl($url, $data);
   }
